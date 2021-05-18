@@ -6,7 +6,7 @@ MODULE linked_list
 	PUBLIC :: create_node, print_list
 
 	TYPE node
-		INTEGER              :: value                    ! data filed
+		INTEGER              :: value                    ! data field
 		TYPE (node), POINTER :: next => null()           ! pointer field
 	END TYPE node
 
