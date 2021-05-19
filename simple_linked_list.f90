@@ -53,7 +53,27 @@ PROGRAM simple_linked_list
       READ *, num                       ! read num from keyboard 
       IF (num == 0) EXIT                ! until 0 is entered
       
-	  CALL append_node(num)
+	  CALL append_tail(num)
+    END DO
+  END IF
+
+  PRINT *, 'Transverse the list built up and print the values'
+
+  CALL print_list(head)
+
+  NULLIFY(head, tail)
+
+  PRINT *, 'Type-in an integer number to build another linked list (0 to terminate)'
+
+  READ *, num                           ! read num from keyboard 
+  IF (num /= 0) then                    ! if 0 is entered, do nothing
+    CALL create_head(num)
+
+    DO                                  ! create rest of list
+      READ *, num                       ! read num from keyboard 
+      IF (num == 0) EXIT                ! until 0 is entered
+      
+	  CALL append_head(num)
     END DO
   END IF
 

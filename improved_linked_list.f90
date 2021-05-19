@@ -4,7 +4,7 @@ MODULE improved_linked_list
 
 	PRIVATE
 	PUBLIC :: head, tail
-	PUBLIC :: create_head, append_node
+	PUBLIC :: create_head, append_tail, append_head
 
 	TYPE (node), POINTER     :: head => null()
 	TYPE (node), POINTER     :: tail => null()
@@ -13,8 +13,12 @@ MODULE improved_linked_list
 		MODULE PROCEDURE allocate_head_and_assign_value
 	END INTERFACE
 	
-	INTERFACE append_node
-		MODULE PROCEDURE allocate_and_assign_value
+	INTERFACE append_tail
+		MODULE PROCEDURE append_node_at_tail
+	END INTERFACE
+
+	INTERFACE append_head
+		MODULE PROCEDURE append_node_at_head
 	END INTERFACE
 
 	CONTAINS
@@ -32,7 +36,7 @@ MODULE improved_linked_list
 
 		END SUBROUTINE
 
-		SUBROUTINE allocate_and_assign_value(num)
+		SUBROUTINE append_node_at_tail(num)
 			IMPLICIT NONE
 			INTEGER, INTENT(in)  :: num
 			INTEGER              :: status
@@ -47,6 +51,22 @@ MODULE improved_linked_list
 			tail%next => current              ! link to tail of list
 			tail => current                   ! update tail of list
 
+		END SUBROUTINE
+
+		SUBROUTINE append_node_at_head(num)
+			IMPLICIT NONE
+			INTEGER, INTENT(in)  :: num
+			INTEGER              :: status
+			TYPE (node), POINTER :: current
+
+			ALLOCATE(current, STAT = status)  ! create new node
+
+			IF (status > 0) STOP 'Fail to allocate a new node'
+			
+			current%value = num               ! giving the value
+			NULLIFY(current%next)             ! point to null (end of list)
+			current%next => head              ! link to head of list
+			head => current                   ! update head of list
 		END SUBROUTINE
 
 END MODULE
