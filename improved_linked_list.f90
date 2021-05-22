@@ -4,13 +4,16 @@ MODULE improved_linked_list
 	IMPLICIT NONE
 
 	PRIVATE
-	PUBLIC :: head, tail
+	PUBLIC :: linked_list_t
+	PUBLIC :: print_list
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
 	PUBLIC :: remove_node
 	PUBLIC :: selection_sort
 
-	TYPE (node), POINTER    :: head => null()
-	TYPE (node), POINTER    :: tail => null()
+	TYPE :: linked_list_t
+		TYPE (node), POINTER    :: head => null()
+		TYPE (node), POINTER    :: tail => null()
+	END TYPE linked_list_t
 
 	INTERFACE create_head
 		MODULE PROCEDURE allocate_head_and_assign_value
@@ -36,26 +39,32 @@ MODULE improved_linked_list
 		MODULE PROCEDURE list_selection_sort
 	END INTERFACE
 
+	INTERFACE print_list
+		MODULE PROCEDURE tranverse_and_print
+	END INTERFACE
+
 	CONTAINS
 
-		SUBROUTINE allocate_head_and_assign_value(num)
+		SUBROUTINE allocate_head_and_assign_value(list, num)
 			IMPLICIT NONE
 			INTEGER, INTENT(in)  :: num
 			INTEGER              :: status
+			TYPE (linked_list_t) :: list
 
-			ALLOCATE(head, STAT = status)       ! create the head of the list
+			ALLOCATE(list%head, STAT = status)       ! create the head of the list
 			IF (status > 0) STOP 'Fail to allocate a new node'
-			head%value = num                    ! give the value
-			NULLIFY(head%next)                  ! point to null
-			tail => head                        ! update tail of list
+			list%head%value = num                    ! give the value
+			NULLIFY(list%head%next)                  ! point to null
+			list%tail => list%head                   ! update tail of list
 
 		END SUBROUTINE
 
-		SUBROUTINE append_node_at_tail(num)
+		SUBROUTINE append_node_at_tail(list, num)
 			IMPLICIT NONE
 			INTEGER, INTENT(in)  :: num
 			INTEGER              :: status
 			TYPE (node), POINTER :: current
+			TYPE (linked_list_t) :: list
 
 			ALLOCATE(current, STAT = status)  ! create new node
 			
@@ -63,16 +72,17 @@ MODULE improved_linked_list
 			
 			current%value = num               ! giving the value
 			NULLIFY(current%next)             ! point to null (end of list)
-			tail%next => current              ! link to tail of list
-			tail => current                   ! update tail of list
+			list%tail%next => current         ! link to tail of list
+			list%tail => current              ! update tail of list
 
 		END SUBROUTINE
 
-		SUBROUTINE append_node_at_head(num)
+		SUBROUTINE append_node_at_head(list, num)
 			IMPLICIT NONE
 			INTEGER, INTENT(in)  :: num
 			INTEGER              :: status
 			TYPE (node), POINTER :: current
+			TYPE (linked_list_t) :: list
 
 			ALLOCATE(current, STAT = status)  ! create new node
 
@@ -80,41 +90,45 @@ MODULE improved_linked_list
 			
 			current%value = num               ! giving the value
 			NULLIFY(current%next)             ! point to null (end of list)
-			current%next => head              ! link to head of list
-			head => current                   ! update head of list
+			current%next => list%head    ! link to head of list
+			list%head => current              ! update head of list
 		END SUBROUTINE
 
-		SUBROUTINE append_new_node_after_node(q, num)
+		SUBROUTINE append_new_node_after_node(list, num, value)
 			IMPLICIT NONE
-			INTEGER, INTENT(in)  :: num
+			INTEGER, INTENT(in)  :: num, value
 			INTEGER              :: status
+			TYPE (node), POINTER :: p
 			TYPE (node), POINTER :: q
 			TYPE (node), POINTER :: current
+			TYPE (linked_list_t) :: list
 
+			p => list%head
 
-			IF (ASSOCIATED(q)) THEN			
-				ALLOCATE(current, STAT = status)  ! create new node
-				IF (status > 0) STOP 'Fail to allocate a new node'
-			
-				current%value = num               ! giving the value
-				current%next => q%next
-				q%next => current
-			
-				IF (ASSOCIATED(q, tail)) tail => current
-			ENDIF
+			DO WHILE (ASSOCIATED(p))
+				q => p
+				IF (q%value == num) THEN
+					ALLOCATE(current, STAT = status)  ! create new node
+					IF (status > 0) STOP 'Fail to allocate a new node'
 
-			IF (.NOT. ASSOCIATED(q)) THEN
-				CALL append_head(num)
-			ENDIF
+					current%value = value               ! giving the value
+					current%next => q%next
+					q%next => current
+
+					IF (ASSOCIATED(q, list%tail)) list%tail => current
+				ENDIF
+				p => p%next
+			ENDDO
 
 		END SUBROUTINE
 
-		SUBROUTINE remove_node_has_key(num)
+		SUBROUTINE remove_node_has_key(list, num)
 			IMPLICIT NONE
-			INTEGER, INTENT(in)  :: num
-			TYPE (node), POINTER :: p, q
+			INTEGER, INTENT(in)        :: num
+			TYPE (node), POINTER       :: p, q
+			TYPE (linked_list_t)       :: list
 
-			p => head
+			p => list%head
 			q => null()
 
 			DO WHILE (ASSOCIATED(p))
@@ -129,23 +143,23 @@ MODULE improved_linked_list
 			ENDIF
 
 			IF (ASSOCIATED(q)) THEN
-				IF (ASSOCIATED(p, tail)) THEN
-					tail => q
+				IF (ASSOCIATED(p, list%tail)) THEN
+					list%tail => q
 				ENDIF
 				q%next => p%next
 				NULLIFY(p)
 			ELSE
-				head => p%next
-				IF (.NOT. ASSOCIATED(head)) NULLIFY(tail)
+				list%head => p%next
+				IF (.NOT. ASSOCIATED(list%head)) NULLIFY(list%tail)
 			ENDIF
 		END SUBROUTINE
 
 		SUBROUTINE list_selection_sort(list)
 			IMPLICIT NONE
-			TYPE (node), POINTER :: list
+			TYPE (linked_list_t) :: list
 			TYPE (node), POINTER :: p, q, min
 
-			p => list
+			p => list%head
 
 			DO WHILE (ASSOCIATED(p))
 				q => p%next
@@ -161,6 +175,21 @@ MODULE improved_linked_list
 				CALL swap(min%value, p%value)
 				p => p%next
 			ENDDO
+		END SUBROUTINE
+
+		SUBROUTINE tranverse_and_print(list)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: list
+			TYPE (node), POINTER :: current
+
+			current => list%head                    ! make current as alias of list
+
+			DO
+				IF (.NOT. ASSOCIATED(current)) EXIT ! exit if null pointer
+				PRINT *, current%value              ! print the value
+				current => current%next             ! make current alias of next node
+			END DO
+
 		END SUBROUTINE
 
 END MODULE

@@ -2,8 +2,7 @@ MODULE linked_list
 	IMPLICIT NONE
 
 	PRIVATE
-	PUBLIC :: node, list
-	PUBLIC :: create_node, print_list
+	PUBLIC :: node
 
 	TYPE node
 		INTEGER              :: value                    ! data field
