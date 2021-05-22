@@ -18,49 +18,16 @@
 !------------------------------------------------------------------------------
 
 PROGRAM simple_linked_list
-  USE linked_list
-  USE improved_linked_list
   IMPLICIT NONE
+  INTEGER :: option
   
-  INTEGER              :: num
-  TYPE (node), POINTER :: tranverser => null()
+  PRINT*,'Please selection one option.'
+  PRINT*,'Option 1: Demo create a linked list, insert a new node to that list, remove that node'
+  PRINT*,'Option 2: Demo sorting a linked list by selection sort algorithm'
 
-  ! build up the list
-
-  NULLIFY(list)                         ! initially nullify list (empty)
-
-  DO num = 1, 5
-	IF (num == 1) THEN 
-		CALL create_head(num)
-	ELSE
-		CALL append_tail(num)
-	ENDIF
-  ENDDO
-
-  PRINT *, 'Transverse the list built up and print the values'
-
-  CALL print_list(head)
-
-  PRINT *, 'Insert new node with value is 10 after node 3 ...'
-  
-  tranverser => head
-  DO 
-	IF (.NOT. ASSOCIATED(tranverser)) EXIT
-	IF (tranverser%value == 3) CALL append_after_node(tranverser, 10)
-	tranverser => tranverser%next
-  ENDDO
-
-  PRINT *, 'Transverse the list built up and print the values'
-
-  CALL print_list(head)
-
-  PRINT *, 'Remove node has value 10 ...'
-
-  CALL remove_node(10)
-
-  PRINT *, 'Transverse the list built up and print the values'
-
-  CALL print_list(head)
+  READ*, option
+  IF (option == 1) CALL list_create_insert_remove
+  IF (option == 2) CALL list_selection_sort
 
 END PROGRAM simple_linked_list
 

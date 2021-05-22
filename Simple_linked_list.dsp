@@ -90,7 +90,15 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat;f90;for;f;fpp"
 # Begin Source File
 
+SOURCE=.\generic_swap.f90
+# End Source File
+# Begin Source File
+
 SOURCE=.\improved_linked_list.f90
+DEP_F90_IMPRO=\
+	".\Debug\generic_swap.mod"\
+	".\Debug\linked_list.mod"\
+	
 # End Source File
 # Begin Source File
 
@@ -98,10 +106,23 @@ SOURCE=.\linked_list.f90
 # End Source File
 # Begin Source File
 
-SOURCE=.\simple_linked_list.f90
-NODEP_F90_SIMPL=\
+SOURCE=.\list_create_insert_remove.f90
+DEP_F90_LIST_=\
+	".\Debug\improved_linked_list.mod"\
 	".\Debug\linked_list.mod"\
 	
+# End Source File
+# Begin Source File
+
+SOURCE=.\list_selection_sort.f90
+NODEP_F90_LIST_S=\
+	".\Debug\improved_linked_list.mod"\
+	".\Debug\linked_list.mod"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=.\simple_linked_list.f90
 # End Source File
 # End Group
 # Begin Group "Header Files"

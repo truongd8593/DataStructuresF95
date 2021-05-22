@@ -1,11 +1,13 @@
 MODULE improved_linked_list
 	USE linked_list, ONLY: node
+	USE generic_swap
 	IMPLICIT NONE
 
 	PRIVATE
 	PUBLIC :: head, tail
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
 	PUBLIC :: remove_node
+	PUBLIC :: selection_sort
 
 	TYPE (node), POINTER    :: head => null()
 	TYPE (node), POINTER    :: tail => null()
@@ -28,6 +30,10 @@ MODULE improved_linked_list
 
 	INTERFACE remove_node
 		MODULE PROCEDURE remove_node_has_key
+	END INTERFACE
+
+	INTERFACE selection_sort
+		MODULE PROCEDURE list_selection_sort
 	END INTERFACE
 
 	CONTAINS
@@ -132,6 +138,29 @@ MODULE improved_linked_list
 				head => p%next
 				IF (.NOT. ASSOCIATED(head)) NULLIFY(tail)
 			ENDIF
+		END SUBROUTINE
+
+		SUBROUTINE list_selection_sort(list)
+			IMPLICIT NONE
+			TYPE (node), POINTER :: list
+			TYPE (node), POINTER :: p, q, min
+
+			p => list
+
+			DO WHILE (ASSOCIATED(p))
+				q => p%next
+				min => p
+
+				DO WHILE (ASSOCIATED(q))
+					IF (q%value < min%value) THEN
+						min => q
+					ENDIF
+					q => q%next
+				ENDDO 
+
+				CALL swap(min%value, p%value)
+				p => p%next
+			ENDDO
 		END SUBROUTINE
 
 END MODULE
