@@ -5,6 +5,7 @@ MODULE improved_linked_list
 	PRIVATE
 	PUBLIC :: head, tail
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
+	PUBLIC :: remove_node
 
 	TYPE (node), POINTER    :: head => null()
 	TYPE (node), POINTER    :: tail => null()
@@ -23,6 +24,10 @@ MODULE improved_linked_list
 
 	INTERFACE append_after_node
 		MODULE PROCEDURE append_new_node_after_node
+	END INTERFACE
+
+	INTERFACE remove_node
+		MODULE PROCEDURE remove_node_has_key
 	END INTERFACE
 
 	CONTAINS
@@ -96,6 +101,37 @@ MODULE improved_linked_list
 				CALL append_head(num)
 			ENDIF
 
+		END SUBROUTINE
+
+		SUBROUTINE remove_node_has_key(num)
+			IMPLICIT NONE
+			INTEGER, INTENT(in)  :: num
+			TYPE (node), POINTER :: p, q
+
+			p => head
+			q => null()
+
+			DO WHILE (ASSOCIATED(p))
+				IF (p%value == num) EXIT
+				q => p
+				p => p%next
+			ENDDO
+
+			IF (.NOT. ASSOCIATED(p)) THEN
+				PRINT*, 'Cannot find node to remove'
+				RETURN
+			ENDIF
+
+			IF (ASSOCIATED(q)) THEN
+				IF (ASSOCIATED(p, tail)) THEN
+					tail => q
+				ENDIF
+				q%next => p%next
+				NULLIFY(p)
+			ELSE
+				head => p%next
+				IF (.NOT. ASSOCIATED(head)) NULLIFY(tail)
+			ENDIF
 		END SUBROUTINE
 
 END MODULE

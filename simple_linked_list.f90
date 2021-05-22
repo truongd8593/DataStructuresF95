@@ -41,7 +41,7 @@ PROGRAM simple_linked_list
 
   CALL print_list(head)
 
-  PRINT *, 'Insert new node with value is 10 after node 3'
+  PRINT *, 'Insert new node with value is 10 after node 3 ...'
   
   tranverser => head
   DO 
@@ -49,6 +49,14 @@ PROGRAM simple_linked_list
 	IF (tranverser%value == 3) CALL append_after_node(tranverser, 10)
 	tranverser => tranverser%next
   ENDDO
+
+  PRINT *, 'Transverse the list built up and print the values'
+
+  CALL print_list(head)
+
+  PRINT *, 'Remove node has value 10 ...'
+
+  CALL remove_node(10)
 
   PRINT *, 'Transverse the list built up and print the values'
 
