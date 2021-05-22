@@ -22,60 +22,33 @@ PROGRAM simple_linked_list
   USE improved_linked_list
   IMPLICIT NONE
   
-  INTEGER :: num
-  
+  INTEGER              :: num
+  TYPE (node), POINTER :: tranverser => null()
 
   ! build up the list
 
   NULLIFY(list)                         ! initially nullify list (empty)
 
-  PRINT *, 'Type-in an integer number to build a linked list (0 to terminate)'
-
-  DO
-    READ *, num                         ! read num from keyboard 
-    IF (num == 0) EXIT                  ! until 0 is entered
-    CALL create_node(num)
-  END DO
-
-  ! transverse the list and print the values
-
-  PRINT *, 'Transverse the list built up and print the values'
-
-  CALL print_list(list)
-
-  PRINT *, 'Type-in an integer number to build another linked list (0 to terminate)'
-
-  READ *, num                           ! read num from keyboard 
-  IF (num /= 0) then                    ! if 0 is entered, do nothing
-    CALL create_head(num)
-
-    DO                                  ! create rest of list
-      READ *, num                       ! read num from keyboard 
-      IF (num == 0) EXIT                ! until 0 is entered
-      
-	  CALL append_tail(num)
-    END DO
-  END IF
+  DO num = 1, 5
+	IF (num == 1) THEN 
+		CALL create_head(num)
+	ELSE
+		CALL append_tail(num)
+	ENDIF
+  ENDDO
 
   PRINT *, 'Transverse the list built up and print the values'
 
   CALL print_list(head)
 
-  NULLIFY(head, tail)
-
-  PRINT *, 'Type-in an integer number to build another linked list (0 to terminate)'
-
-  READ *, num                           ! read num from keyboard 
-  IF (num /= 0) then                    ! if 0 is entered, do nothing
-    CALL create_head(num)
-
-    DO                                  ! create rest of list
-      READ *, num                       ! read num from keyboard 
-      IF (num == 0) EXIT                ! until 0 is entered
-      
-	  CALL append_head(num)
-    END DO
-  END IF
+  PRINT *, 'Insert new node with value is 10 after node 3'
+  
+  tranverser => head
+  DO 
+	IF (.NOT. ASSOCIATED(tranverser)) EXIT
+	IF (tranverser%value == 3) CALL append_after_node(tranverser, 10)
+	tranverser => tranverser%next
+  ENDDO
 
   PRINT *, 'Transverse the list built up and print the values'
 
