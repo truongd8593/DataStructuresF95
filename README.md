@@ -1,5 +1,11 @@
 # DataStucturesF95
-Classical data structures written in F95 and strictly conformant to F95 standard.
+Classical data structures written in F95 and strictly conformant to F95 standard. 
+
+Data structures in this repo:
+
+- Singly linked list (fully implemented).
+- Stack (to be implemented).
+- Queue (to be implemented).
 
 Reference:
 
