@@ -1,4 +1,4 @@
-# DataStucturesF95
+# DataStructuresF95
 Classical data structures written in F95 and strictly conformant to F95 standard. 
 
 Data structures in this repo:
