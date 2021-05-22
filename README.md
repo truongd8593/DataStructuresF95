@@ -1,5 +1,5 @@
-# SimpleLinkedListF95
-Singly linked list written in F95 and strictly conformant to F95 standard.
+# DataStucturesF95
+Classical data structures written in F95 and strictly conformant to F95 standard.
 
 Reference:
 
