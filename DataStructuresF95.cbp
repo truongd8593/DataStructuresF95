@@ -28,10 +28,30 @@
 				</Linker>
 			</Target>
 		</Build>
-		<Compiler>
-			<Add option="-Wall" />
-		</Compiler>
-		<Unit filename="main.f90" />
+		<Unit filename="generic_swap.f90">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="improved_linked_list.f90">
+			<Option weight="1" />
+		</Unit>
+		<Unit filename="linked_list.f90">
+			<Option weight="0" />
+		</Unit>
+		<Unit filename="list_create_insert_remove.f90">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="list_quick_sort.f90">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="list_selection_sort.f90">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="list_selection_sort_2.f90">
+			<Option weight="2" />
+		</Unit>
+		<Unit filename="simple_linked_list.f90">
+			<Option weight="0" />
+		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

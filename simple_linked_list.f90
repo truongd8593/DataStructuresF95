@@ -6,9 +6,13 @@
 !
 !  Purpose:
 !
-!    This program demonstrates how to build and transverse a 
-!    simple linked list by using pointers and dynamic allocation
-!    facilities.
+!    This program demonstrates:
+!    * How to build, transverse a
+!      simple linked list by using pointers and dynamic allocation
+!      facilities.
+!    * Add new node to linked list at tail and/or head of linked list.
+!    * Remove node has given key in linked list.
+!    * Some sorting algorithms over linked list.
 !
 !    Notice the linked list implementation in module linked_list 
 !    stores the typed-in numbers in reverse order, whereas
