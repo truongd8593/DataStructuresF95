@@ -7,7 +7,7 @@ Data structures in this repo:
   + Selection sort (fully implemented).
   + Quick sort (partially implemented, ie. defect).
   + Merge sort (partially implemented, ie. defect).
-  + Radix sort (to be implemented).
+  + Radix sort (partially implemented, two test cases passed).
 - Stack (to be implemented).
 - Queue (to be implemented).
 
