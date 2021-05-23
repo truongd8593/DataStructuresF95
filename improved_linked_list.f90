@@ -195,6 +195,7 @@ MODULE improved_linked_list
 			ENDIF
 
 			q%next => l2%head
+			l2%head => q
 
 			IF (ASSOCIATED(l2%head)) THEN
 				l%tail => l2%tail
