@@ -8,7 +8,8 @@ MODULE improved_linked_list
 	PUBLIC :: print_list
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
 	PUBLIC :: remove_node
-	PUBLIC :: selection_sort, selection_sort_2, quick_sort, merge_sort
+	PUBLIC :: selection_sort, selection_sort_2, radix_sort
+	PUBLIC :: quick_sort, merge_sort ! defect in those two algorithms
 
 	TYPE :: linked_list_t
 		TYPE (node), POINTER    :: head => null()
@@ -18,7 +19,7 @@ MODULE improved_linked_list
 	INTERFACE create_head
 		MODULE PROCEDURE allocate_head_and_assign_value
 	END INTERFACE
-	
+
 	INTERFACE append_tail
 		MODULE PROCEDURE append_node_at_tail
 	END INTERFACE
@@ -45,6 +46,10 @@ MODULE improved_linked_list
 
 	INTERFACE quick_sort
 		MODULE PROCEDURE list_quick_sort
+	END INTERFACE
+
+	INTERFACE radix_sort
+		MODULE PROCEDURE list_radix_sort
 	END INTERFACE
 
 	INTERFACE merge_sort
@@ -79,9 +84,9 @@ MODULE improved_linked_list
 			TYPE (linked_list_t) :: list
 
 			ALLOCATE(current, STAT = status)  ! create new node
-			
+
 			IF (status > 0) STOP 'Fail to allocate a new node'
-			
+
 			current%value = num               ! giving the value
 			NULLIFY(current%next)             ! point to null (end of list)
 			list%tail%next => current         ! link to tail of list
@@ -99,7 +104,7 @@ MODULE improved_linked_list
 			ALLOCATE(current, STAT = status)  ! create new node
 
 			IF (status > 0) STOP 'Fail to allocate a new node'
-			
+
 			current%value = num               ! giving the value
 			NULLIFY(current%next)             ! point to null (end of list)
 			current%next => list%head    ! link to head of list
@@ -165,6 +170,63 @@ MODULE improved_linked_list
 				IF (.NOT. ASSOCIATED(list%head)) NULLIFY(list%tail)
 			ENDIF
 		END SUBROUTINE
+
+		SUBROUTINE list_radix_sort(l)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l, B(0:9)
+			TYPE (node), POINTER :: p
+			INTEGER              :: i, j, k
+
+			IF (ASSOCIATED(l%head, l%tail)) RETURN
+
+			DO k = 0, 9
+				DO WHILE (ASSOCIATED(l%head))
+                    p => l%head
+                    l%head => p%next
+                    NULLIFY(p%next)
+					i = get_digit(p%value, k)
+					CALL add_tail(B(i), p)
+				ENDDO
+			ENDDO
+
+			l= B(0)
+
+			DO j = 1, 9
+				CALL append_list(l, B(j))
+			ENDDO
+
+
+		END SUBROUTINE
+
+		SUBROUTINE append_list(l, l1)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l, l1
+
+			IF (ASSOCIATED(l%head) .AND. ASSOCIATED(l1%head)) THEN
+				l%tail%next => l1%head
+				l%tail => l1%tail
+            ELSE IF (ASSOCIATED(l%head) .AND. .NOT. ASSOCIATED(l1%head)) THEN
+                RETURN
+			ELSE
+				l = l1
+			ENDIF
+		END SUBROUTINE
+
+		INTEGER FUNCTION get_digit(n, k)
+			IMPLICIT NONE
+			INTEGER :: n, k
+
+			IF (k == 0) get_digit = MOD(n, 10)
+			IF (k == 1) get_digit = MOD(n/10, 10)
+			IF (k == 2) get_digit = MOD(n/100, 10)
+			IF (k == 3) get_digit = MOD(n/1000, 10)
+			IF (k == 4) get_digit = MOD(n/10000, 10)
+			IF (k == 5) get_digit = MOD(n/100000, 10)
+			IF (k == 6) get_digit = MOD(n/1000000, 10)
+			IF (k == 7) get_digit = MOD(n/10000000, 10)
+			IF (k == 8) get_digit = MOD(n/100000000, 10)
+			IF (k == 9) get_digit = MOD(n/1000000000, 10)
+		END FUNCTION get_digit
 
 		RECURSIVE SUBROUTINE list_quick_sort(l)
 			IMPLICIT NONE
@@ -285,7 +347,7 @@ MODULE improved_linked_list
 						min => q
 					ENDIF
 					q => q%next
-				ENDDO 
+				ENDDO
 
 				CALL swap(min%value, p%value)
 				p => p%next
@@ -352,11 +414,15 @@ MODULE improved_linked_list
 
 			current => list%head                    ! make current as alias of list
 
+			PRINT*, "["
+
 			DO
 				IF (.NOT. ASSOCIATED(current)) EXIT ! exit if null pointer
-				PRINT *, current%value              ! print the value
+				PRINT *, current%value, ','         ! print the value
 				current => current%next             ! make current alias of next node
 			END DO
+
+			PRINT*, "]"
 
 		END SUBROUTINE
 
