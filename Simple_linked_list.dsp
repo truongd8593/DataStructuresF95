@@ -95,7 +95,7 @@ SOURCE=.\generic_swap.f90
 # Begin Source File
 
 SOURCE=.\improved_linked_list.f90
-DEP_F90_IMPRO=\
+NODEP_F90_IMPRO=\
 	".\Debug\generic_swap.mod"\
 	".\Debug\linked_list.mod"\
 	
@@ -107,7 +107,7 @@ SOURCE=.\linked_list.f90
 # Begin Source File
 
 SOURCE=.\list_create_insert_remove.f90
-DEP_F90_LIST_=\
+NODEP_F90_LIST_=\
 	".\Debug\improved_linked_list.mod"\
 	".\Debug\linked_list.mod"\
 	
@@ -116,6 +116,14 @@ DEP_F90_LIST_=\
 
 SOURCE=.\list_selection_sort.f90
 NODEP_F90_LIST_S=\
+	".\Debug\improved_linked_list.mod"\
+	".\Debug\linked_list.mod"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=.\list_selection_sort_2.f90
+DEP_F90_LIST_SE=\
 	".\Debug\improved_linked_list.mod"\
 	".\Debug\linked_list.mod"\
 	

@@ -23,11 +23,13 @@ PROGRAM simple_linked_list
   
   PRINT*,'Please selection one option.'
   PRINT*,'Option 1: Demo create a linked list, insert a new node to that list, remove that node'
-  PRINT*,'Option 2: Demo sorting a linked list by selection sort algorithm'
+  PRINT*,'Option 2: Demo sorting a linked list by selection sort algorithm - Manipulate data field'
+  PRINT*,'Option 3: Demo sorting a linked list by selection sort algorithm - Manipulate pointer next'
 
   READ*, option
   IF (option == 1) CALL list_create_insert_remove
   IF (option == 2) CALL list_selection_sort
+  IF (option == 3) CALL list_selection_sort_2
 
 END PROGRAM simple_linked_list
 

@@ -8,7 +8,7 @@ MODULE improved_linked_list
 	PUBLIC :: print_list
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
 	PUBLIC :: remove_node
-	PUBLIC :: selection_sort
+	PUBLIC :: selection_sort, selection_sort_2
 
 	TYPE :: linked_list_t
 		TYPE (node), POINTER    :: head => null()
@@ -37,6 +37,10 @@ MODULE improved_linked_list
 
 	INTERFACE selection_sort
 		MODULE PROCEDURE list_selection_sort
+	END INTERFACE
+
+	INTERFACE selection_sort_2
+		MODULE PROCEDURE list_selection_sort_2
 	END INTERFACE
 
 	INTERFACE print_list
@@ -155,6 +159,7 @@ MODULE improved_linked_list
 		END SUBROUTINE
 
 		SUBROUTINE list_selection_sort(list)
+			! Selection sort algorithm on linked list by manipulating data field
 			IMPLICIT NONE
 			TYPE (linked_list_t) :: list
 			TYPE (node), POINTER :: p, q, min
@@ -175,6 +180,51 @@ MODULE improved_linked_list
 				CALL swap(min%value, p%value)
 				p => p%next
 			ENDDO
+		END SUBROUTINE
+
+		SUBROUTINE list_selection_sort_2(list)
+			IMPLICIT NONE
+			! Selection sort algorithm on linked list by manipulating pointer 'next'
+			TYPE (linked_list_t) :: list
+			TYPE (linked_list_t) :: list_res
+			TYPE (node), POINTER :: min, min_prev, p, q
+
+			DO WHILE (ASSOCIATED(list%head))
+				p => list%head
+				q => p%next
+				min => p
+				min_prev => null()
+
+				DO WHILE (ASSOCIATED(q))
+					IF (q%value < min%value) THEN
+						min => q
+						min_prev => p
+					ENDIF
+					p => q
+					q => q%next
+				ENDDO
+
+				IF (ASSOCIATED(min_prev)) THEN
+					min_prev%next => min%next
+				ELSE
+					list%head => min%next
+				ENDIF
+
+				! Append min to tail of list_res
+				IF (.NOT. ASSOCIATED(list_res%head)) THEN
+					list_res%head => min
+					list_res%tail => list_res%head
+				ELSE
+					list_res%tail%next => min
+					list_res%tail => min
+				ENDIF
+
+			ENDDO
+
+			! Assign list = list_res
+			list%head => list_res%head
+			list%tail => list_res%tail
+
 		END SUBROUTINE
 
 		SUBROUTINE tranverse_and_print(list)
