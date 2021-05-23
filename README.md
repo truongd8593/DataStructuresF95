@@ -3,7 +3,11 @@ Classical data structures written in F95 and strictly conformant to F95 standard
 
 Data structures in this repo:
 
-- Singly linked list (fully implemented). Some sorting algorithms will be implemented for linked list.
+- Singly linked list (fully implemented). Some sorting algorithms will be implemented for linked list, including:
+  + Selection sort (fully implemented).
+  + Quick sort (partially implemented, ie. defect).
+  + Merge sort (to be implemented).
+  + Radix sort (to be implemented).
 - Stack (to be implemented).
 - Queue (to be implemented).
 
