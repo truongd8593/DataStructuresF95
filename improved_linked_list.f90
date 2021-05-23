@@ -8,7 +8,7 @@ MODULE improved_linked_list
 	PUBLIC :: print_list
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
 	PUBLIC :: remove_node
-	PUBLIC :: selection_sort, selection_sort_2
+	PUBLIC :: selection_sort, selection_sort_2, quick_sort
 
 	TYPE :: linked_list_t
 		TYPE (node), POINTER    :: head => null()
@@ -41,6 +41,10 @@ MODULE improved_linked_list
 
 	INTERFACE selection_sort_2
 		MODULE PROCEDURE list_selection_sort_2
+	END INTERFACE
+
+	INTERFACE quick_sort
+		MODULE PROCEDURE list_quick_sort
 	END INTERFACE
 
 	INTERFACE print_list
@@ -158,6 +162,48 @@ MODULE improved_linked_list
 			ENDIF
 		END SUBROUTINE
 
+		RECURSIVE SUBROUTINE list_quick_sort(l)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l, l1, l2
+			TYPE (node), POINTER :: p, q
+
+			IF (ASSOCIATED(l%head, l%tail)) RETURN
+
+			q => l%head
+			l%head => q%next
+
+			DO WHILE (ASSOCIATED(l%head))
+				p => l%head
+				l%head => p%next
+				p%next => null()
+
+				IF (p%value <= q%value) THEN
+					CALL add_tail(l1, p)
+				ELSE
+					CALL add_tail(l2, p)
+				ENDIF
+			ENDDO
+
+			CALL list_quick_sort(l1)
+			CALL list_quick_sort(l2)
+
+			IF (ASSOCIATED(l1%head)) THEN
+				l%head => l1%head
+				l1%tail%next => q
+			ELSE
+				l%head => q
+			ENDIF
+
+			q%next => l2%head
+
+			IF (ASSOCIATED(l2%head)) THEN
+				l%tail => l2%tail
+			ELSE
+				l%tail => q
+			ENDIF
+
+		END SUBROUTINE
+
 		SUBROUTINE list_selection_sort(list)
 			! Selection sort algorithm on linked list by manipulating data field
 			IMPLICIT NONE
@@ -211,13 +257,7 @@ MODULE improved_linked_list
 				ENDIF
 
 				! Append min to tail of list_res
-				IF (.NOT. ASSOCIATED(list_res%head)) THEN
-					list_res%head => min
-					list_res%tail => list_res%head
-				ELSE
-					list_res%tail%next => min
-					list_res%tail => min
-				ENDIF
+				CALL add_tail(list_res, min)
 
 			ENDDO
 
@@ -225,6 +265,20 @@ MODULE improved_linked_list
 			list%head => list_res%head
 			list%tail => list_res%tail
 
+		END SUBROUTINE
+
+		SUBROUTINE add_tail(l, new_node)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l
+			TYPE (node), POINTER :: new_node
+
+			IF (.NOT. ASSOCIATED(l%head)) THEN
+				l%head => new_node
+				l%tail => l%head
+			ELSE
+				l%tail%next => new_node
+				l%tail => new_node
+			ENDIF
 		END SUBROUTINE
 
 		SUBROUTINE tranverse_and_print(list)

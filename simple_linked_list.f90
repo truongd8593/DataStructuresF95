@@ -25,11 +25,13 @@ PROGRAM simple_linked_list
   PRINT*,'Option 1: Demo create a linked list, insert a new node to that list, remove that node'
   PRINT*,'Option 2: Demo sorting a linked list by selection sort algorithm - Manipulate data field'
   PRINT*,'Option 3: Demo sorting a linked list by selection sort algorithm - Manipulate pointer next'
+  PRINT*,'Option 4: Demo sorting a linked list by quick sort algorithm'
 
   READ*, option
   IF (option == 1) CALL list_create_insert_remove
   IF (option == 2) CALL list_selection_sort
   IF (option == 3) CALL list_selection_sort_2
+  IF (option == 4) CALL list_quick_sort
 
 END PROGRAM simple_linked_list
 
