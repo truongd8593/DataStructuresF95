@@ -46,6 +46,9 @@
 		<Unit filename="list_quick_sort.f90">
 			<Option weight="2" />
 		</Unit>
+		<Unit filename="list_radix_sort.f90">
+			<Option weight="2" />
+		</Unit>
 		<Unit filename="list_selection_sort.f90">
 			<Option weight="2" />
 		</Unit>
