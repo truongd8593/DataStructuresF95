@@ -114,8 +114,16 @@ NODEP_F90_LIST_=\
 # End Source File
 # Begin Source File
 
+SOURCE=.\list_merge_sort.f90
+DEP_F90_LIST_M=\
+	".\Debug\improved_linked_list.mod"\
+	".\Debug\linked_list.mod"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=.\list_quick_sort.f90
-DEP_F90_LIST_Q=\
+NODEP_F90_LIST_Q=\
 	".\Debug\improved_linked_list.mod"\
 	".\Debug\linked_list.mod"\
 	
@@ -131,7 +139,7 @@ NODEP_F90_LIST_S=\
 # Begin Source File
 
 SOURCE=.\list_selection_sort_2.f90
-DEP_F90_LIST_SE=\
+NODEP_F90_LIST_SE=\
 	".\Debug\improved_linked_list.mod"\
 	".\Debug\linked_list.mod"\
 	

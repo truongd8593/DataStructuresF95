@@ -8,7 +8,7 @@ MODULE improved_linked_list
 	PUBLIC :: print_list
 	PUBLIC :: create_head, append_tail, append_head, append_after_node
 	PUBLIC :: remove_node
-	PUBLIC :: selection_sort, selection_sort_2, quick_sort
+	PUBLIC :: selection_sort, selection_sort_2, quick_sort, merge_sort
 
 	TYPE :: linked_list_t
 		TYPE (node), POINTER    :: head => null()
@@ -45,6 +45,10 @@ MODULE improved_linked_list
 
 	INTERFACE quick_sort
 		MODULE PROCEDURE list_quick_sort
+	END INTERFACE
+
+	INTERFACE merge_sort
+		MODULE PROCEDURE list_merge_sort
 	END INTERFACE
 
 	INTERFACE print_list
@@ -203,6 +207,65 @@ MODULE improved_linked_list
 				l%tail => q
 			ENDIF
 
+		END SUBROUTINE
+
+		RECURSIVE SUBROUTINE list_merge_sort(l)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l, l1, l2
+
+			IF (ASSOCIATED(l%head, l%tail)) RETURN
+			CALL distribute_list(l, l1, l2)
+			CALL list_merge_sort(l1)
+			CALL list_merge_sort(l2)
+			CALL merge_list(l, l1, l2)
+		END SUBROUTINE
+
+		SUBROUTINE merge_list(l,l1,l2)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l, l1, l2
+			TYPE (node), POINTER :: p
+
+			DO WHILE (ASSOCIATED(l1%head) .AND. ASSOCIATED(l2%head))
+				IF (l1%head%value <= l2%head%value) THEN
+					p => l1%head
+					l1%head => p%next
+				ELSE
+					p => l2%head
+					l2%head => p%next
+				ENDIF
+
+				NULLIFY(p%next)
+				CALL add_tail(l, p)
+			ENDDO
+
+			IF (ASSOCIATED(l1%head)) THEN
+				l%tail%next => l1%head
+				l%tail => l1%tail
+			ELSEIF (ASSOCIATED(l2%head)) THEN
+				l%tail%next => l2%head
+				l%tail => l2%tail
+			ENDIF
+
+		END SUBROUTINE
+
+		RECURSIVE SUBROUTINE distribute_list(l, l1, l2)
+			IMPLICIT NONE
+			TYPE (linked_list_t) :: l, l1, l2
+			TYPE (node), POINTER :: p
+
+			DO WHILE (ASSOCIATED(l%head) .AND. p%value <= l%head%value)
+				p => l%head
+				l%head => p%next
+				p%next => null()
+
+				CALL add_tail(l1, p)
+			ENDDO
+
+			IF (ASSOCIATED(l%head)) THEN
+				CALL distribute_list(l, l2, l1)
+			ELSE
+				NULLIFY(l%tail)
+			ENDIF
 		END SUBROUTINE
 
 		SUBROUTINE list_selection_sort(list)
