@@ -6,7 +6,7 @@ Data structures in this repo:
 - Singly linked list (fully implemented). Some sorting algorithms will be implemented for linked list, including:
   + Selection sort (fully implemented).
   + Quick sort (partially implemented, ie. defect).
-  + Merge sort (to be implemented).
+  + Merge sort (partially implemented, ie. defect).
   + Radix sort (to be implemented).
 - Stack (to be implemented).
 - Queue (to be implemented).
