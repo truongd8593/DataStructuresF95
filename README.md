@@ -1,11 +1,13 @@
 # DataStructuresF95
 Classical data structures written in F95 and strictly conformant to F95 standard. 
 
+This repo has been migrated to [ClassicalDataStructuresF95](https://github.com/truongd8593/ClassicalDataStructuresF95), where I setup Visual Studio 2019 project, so that Fortran code could be compiled and executed by Intel Fortran compiler (part of Intel OneAPI HPC Toolkit). I was impressed by Intel debugger which helped me fixed a bug in my quick sort implementation.
+
 Data structures in this repo:
 
 - Singly linked list (fully implemented). Some sorting algorithms will be implemented for linked list, including:
   + Selection sort (fully implemented).
-  + Quick sort (partially implemented, ie. defect).
+  + Quick sort (partially implemented, ie. defect). GDB debugger integrated in Code::Blocks couldn't help me overcome this defect.
   + Merge sort (partially implemented, ie. defect).
   + Radix sort (partially implemented, two test cases passed).
 - Stack (to be implemented).
